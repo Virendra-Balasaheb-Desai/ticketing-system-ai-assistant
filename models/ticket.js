@@ -31,7 +31,7 @@ const ticketSchema = mongoose.Schema(
         deadline: {
             type:"Date"
         },
-        helpfulNotest: {
+        helpfulNotes: {
             type:"String"
         },
     },
