@@ -14,7 +14,7 @@ export const onTicketCreate = inngest.createFunction(
     
             //fetch ticket
             const ticket = await step.run("find-ticket", async () => {
-                const ticketObject = await Ticket.findByIda(ticketId);
+                const ticketObject = await Ticket.findById(ticketId);
                 if(!ticketObject) throw NonRetriableError("Ticket not found");
     
                 return ticketObject;
@@ -31,8 +31,8 @@ export const onTicketCreate = inngest.createFunction(
                         priority: !priorities.includes(aiResponse.priority)?"medium":aiResponse.priority,
                         helpfulNotes:aiResponse.helpfulNotes,
                         status:"ASSIGNED",
-                        relatedSkills:aiResponse.relatedSkills
-                    })
+                        relatedSkills: aiResponse.relatedSkills
+                    })            
                     skills = aiResponse.relatedSkills;
                 }
                 return skills;
@@ -65,13 +65,14 @@ export const onTicketCreate = inngest.createFunction(
             //send mail to moderator
             await step.run("send-mail-notification", async () => {
                 if(moderator){
+                    const ticketOwner = await User.findById(ticket.createdBy);
                     await sendMail(
                         moderator.email,
                         "New Ticket assigned",
                         `
                         <h3>A new ticket assigned to you</h3>
                         <div>Title : ${ticket.title}</div>
-                        <div>Created By : ${ticket.createdBy}</div>
+                        <div>Created By : ${ticketOwner.email}</div>
                         `
                     );
                 }
