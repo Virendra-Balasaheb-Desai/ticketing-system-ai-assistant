@@ -36,6 +36,9 @@ export const config = {
     matcher: [
         '/api/users/logout',
         '/api/users/update',
-        '/api/users/getusers'
+        '/api/users/getusers',
+        '/api/tickets/createticket',
+        '/api/tickets/getticket/:path',
+        '/api/tickets/gettickets'
     ]
 }

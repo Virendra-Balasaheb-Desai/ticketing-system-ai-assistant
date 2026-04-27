@@ -2,22 +2,22 @@ import mongoose from "mongoose";
 
 const ticketSchema = mongoose.Schema(
     {
-        name: {
+        title: {
             type:"String"
         },
-        descriptions: {
+        description: {
             type:"String"
         },
         status:{
-            type:"Enum",
+            type:"String",
             default: "OPEN",
             enum: ["OPEN","ASSIGNED","CLOSE"]
         },
-        requiredSkills:[
+        relatedSkills:[
             String
         ],
         createdBy: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,   
             ref: "User"
         },
         assignedTo: {
