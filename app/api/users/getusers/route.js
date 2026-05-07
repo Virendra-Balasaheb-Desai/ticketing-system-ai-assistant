@@ -2,7 +2,7 @@ import { connectDB } from "@/db";
 import User from "@/models/user";
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
+export async function GET(req) {
 
     try {
         const user = JSON.parse(req.headers.get("x-user") || "null");
@@ -11,7 +11,7 @@ export async function POST(req) {
           
         
         await connectDB();
-        const users = await User.find().select("-password");
+        const users = await User.find();
 
         if(!users) throw Error("Users doesn't exists in system.");
 
@@ -23,10 +23,15 @@ export async function POST(req) {
 
     } catch (error) {
         console.log("Error in get Users: ", error.message);
-        return NextResponse.json({
-            success: false,
-            message: error.message
-        });
+        return NextResponse.json(
+            {
+                success: false,
+                message: error.message
+            },
+            {
+                status:500
+            }
+        );
     }
 
 }

@@ -8,15 +8,15 @@ export async function GET(req,{params}) {
 
         const user = JSON.parse(await req.headers.get("x-user"));
         let ticket;
-        const userId = (await params).id;
+        const ticketId = (await params).id; 
         
         await connectDB();
         if(user.role !== "user"){
-            ticket = await Ticket.find({createdBy:userId})
+            ticket = await Ticket.findById(ticketId)
             .populate("assignedTo",["email","_id"])
         }
         else{
-            ticket = await Ticket.findOne({ _id:userId, createdBy:user._id })
+            ticket = await Ticket.findOne({ _id:ticketId, createdBy:user._id })
             .select("title description status createdAt");
         }
 
@@ -30,10 +30,15 @@ export async function GET(req,{params}) {
 
     } catch (error) {
         console.log("Error in Ticket fetching : ", error?.message);
-        return NextResponse.json({
-            success: false,
-            message: error?.message
-        });
+        return NextResponse.json(
+            {
+                success: false,
+                message: error.message
+            },
+            {
+                status:500
+            }
+        );
     }
 
 }
