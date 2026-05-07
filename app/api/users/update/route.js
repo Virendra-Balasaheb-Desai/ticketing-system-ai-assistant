@@ -33,10 +33,15 @@ export async function POST(req) {
 
     } catch (error) {
         console.log("Error in User update: ", error.message);
-        return NextResponse.json({
-            success: false,
-            message: error.message
-        });
+        return NextResponse.json(
+            {
+                success: false,
+                message: error.message
+            },
+            {
+                status:500
+            }
+        );
     }
 
 }

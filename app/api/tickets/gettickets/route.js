@@ -1,5 +1,6 @@
 import { connectDB } from "@/db";
 import Ticket from "@/models/ticket";
+import User from "@/models/user";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
@@ -29,10 +30,15 @@ export async function GET(req) {
 
     } catch (error) {
         console.log("Error in Tickets fetching : ", error?.message);
-        return NextResponse.json({
-            success: false,
-            message: error?.message
-        });
+        return NextResponse.json(
+            {
+                success: false,
+                message: error.message
+            },
+            {
+                status:500
+            }
+        );
     }
 
 }
