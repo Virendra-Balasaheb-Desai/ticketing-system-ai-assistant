@@ -1,4 +1,3 @@
-import { ConsoleLogger } from 'inngest';
 import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server'
 
