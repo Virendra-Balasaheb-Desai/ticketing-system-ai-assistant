@@ -2,6 +2,7 @@ import { NonRetriableError } from "inngest";
 import { inngest } from "../client";
 import User from "@/models/user";
 import { sendMail } from "@/utils/mailer";
+import { connectDB } from "@/db";
 
 export const onSignupUser = inngest.createFunction(
     {id:"on-user-signup", retries:2, triggers:{event:"user/signup"} },   
@@ -11,6 +12,7 @@ export const onSignupUser = inngest.createFunction(
 
             //step 1: check user exists or not
             const user = await step.run("get-user-email", async () => {
+                await connectDB();
                 const userObject = await User.findOne({email});
                 if(!userObject){
                     throw new NonRetriableError("User doesn't exists")

@@ -4,6 +4,7 @@ import { NonRetriableError } from "inngest";
 import analyzeTicket from "@/utils/ai";
 import User from "@/models/user";
 import { sendMail } from "@/utils/mailer";
+import { connectDB } from "@/db";
 
 
 export const onTicketCreate = inngest.createFunction(
@@ -14,6 +15,7 @@ export const onTicketCreate = inngest.createFunction(
     
             //fetch ticket
             const ticket = await step.run("find-ticket", async () => {
+                await connectDB();
                 const ticketObject = await Ticket.findById(ticketId);
                 if(!ticketObject) throw NonRetriableError("Ticket not found");
     
@@ -24,6 +26,7 @@ export const onTicketCreate = inngest.createFunction(
 
             //process ticket
             const relatedSkills = await step.run("ai-processing", async () => {
+                await connectDB();
                 let skills = []
                 if(aiResponse){
                     const priorities = ['low','medium','high'];
@@ -40,6 +43,7 @@ export const onTicketCreate = inngest.createFunction(
 
             //assign moderator
             const moderator = await step.run("assign-moderator",async () => {
+                await connectDB();
                 let user = await User.findOne({
                     role: "moderator",
                     skills: {
@@ -64,6 +68,7 @@ export const onTicketCreate = inngest.createFunction(
 
             //send mail to moderator
             await step.run("send-mail-notification", async () => {
+                await connectDB();
                 if(moderator){
                     const ticketOwner = await User.findById(ticket.createdBy);
                     await sendMail(
