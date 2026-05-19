@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="bg-base-100 text-base-content">
@@ -12,8 +14,12 @@ export default function Home() {
             <p className="py-6 text-lg">
               Automatically categorize, prioritize, and assign tickets to the right moderators — powered by AI.
             </p>
-              <button className="btn btn-primary mr-3">Get Started</button>
-            <button className="btn btn-outline">Raise a Ticket</button>
+              <Link href={"/signup"} >
+                <button className="btn btn-primary mr-3">Get Started</button>
+              </Link>
+              <Link href={"/tickets"}>
+                <button className="btn btn-outline">Raise a Ticket</button>
+              </Link>
           </div>
         </div>
       </div>

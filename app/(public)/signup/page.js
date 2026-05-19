@@ -1,12 +1,15 @@
 "use client"
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
+import { AuthContext } from "@/context/AuthContext";
+import Link from "next/link";
 
 export default function SignupPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const { setUser } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -31,8 +34,9 @@ export default function SignupPage() {
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        router.push("/");
+        setUser(data.data)
+        localStorage.setItem("user", JSON.stringify(data.data));
+        router.push("/tickets");
       } else {
         alert(data.message || "Signup failed");
       }
@@ -70,6 +74,9 @@ export default function SignupPage() {
             required
           />
 
+          <div className="justify-self-end text-end mt-4">
+            Already have an account? <Link href="/login" className="underline"> Login </Link>
+          </div>
           <div className="form-control mt-4">
             <button
               type="submit"

@@ -2,6 +2,7 @@
 import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/context/AuthContext";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -70,8 +71,10 @@ export default function LoginPage() {
             value={form.password}
             onChange={handleChange}
             required
-          />
-
+          />         
+          <div className="text-end mt-4">
+            Don't have an account? <Link  href="/signup" className="underline"> Signup </Link>
+          </div>
           <div className="form-control mt-4">
             <button
               type="submit"
